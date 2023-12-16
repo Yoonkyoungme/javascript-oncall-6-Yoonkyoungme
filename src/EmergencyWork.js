@@ -10,8 +10,12 @@ class EmergencyWork {
   }
 
   async readDutyScheduler() {
-    const input = InputView.readDutySchedule();
-    return input;
+    try {
+      return new DutyScheduler(await InputView.readDutySchedule());
+    } catch (error) {
+      OutputView.print(error.message);
+      return this.readDutyScheduler();
+    }
   }
 }
 
