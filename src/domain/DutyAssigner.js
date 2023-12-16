@@ -34,6 +34,11 @@ class DutyAssigner {
     const endDay = this.getEndDay();
     for (let start = startDay; start <= endDay; start += 1) {
       const isWeekday = this.isWeekday(start);
+      if (isWeekday) {
+        this.applyDuty(this.#weekdayEmployees, this.#employeesIndex[0], true);
+      } else {
+        this.applyDuty(this.#holidayEmployees, this.#employeesIndex[1], false);
+      }
     }
   }
 
@@ -60,6 +65,17 @@ class DutyAssigner {
     const isWeekend = day === 0 || day === 6;
     const isLegalHoliday = LEGAL_HOLIDAYS.includes(`5월 ${date}일`);
     return !isWeekend && !isLegalHoliday;
+  }
+
+  applyDuty(employeesList, index, isWeekday) {
+    const employee = employeesList[index];
+
+    this.#employees.push(employee);
+    if (isWeekday) {
+      this.#employeesIndex[0] = (index + 1) % employeesList.length;
+    } else {
+      this.#employeesIndex[1] = (index + 1) % employeesList.length;
+    }
   }
 }
 
