@@ -59,7 +59,9 @@ class EmergencyWork {
       this.#dutyScheduler,
       this.#weekdayEmployees,
       this.#holidayEmployees,
-    );
+    ).getResult();
+
+    OutputView.printResult(this.#dutyAssigner);
   }
 }
 

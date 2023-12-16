@@ -26,7 +26,6 @@ class DutyAssigner {
 
   assignDuty() {
     this.getMonthlyScheduler();
-    return this.#monthlyScheduler;
   }
 
   getMonthlyScheduler() {
@@ -44,9 +43,9 @@ class DutyAssigner {
         DAY_OF_WEEK[this.getDay(start)] +
         (this.isLegalHoliday(start) ? '(휴무)' : '');
       this.#monthlyScheduler.push([
-        `${this.#dutyScheduler[0]} ${start}일 ${dayOfWeek} ${this.#employees.at(
-          -1,
-        )}`,
+        `${
+          this.#dutyScheduler[0]
+        }월 ${start}일 ${dayOfWeek} ${this.#employees.at(-1)}`,
       ]);
     }
   }
@@ -105,6 +104,10 @@ class DutyAssigner {
       employeesList[index2],
       employeesList[index1],
     ];
+  }
+
+  getResult() {
+    return this.#monthlyScheduler;
   }
 }
 
