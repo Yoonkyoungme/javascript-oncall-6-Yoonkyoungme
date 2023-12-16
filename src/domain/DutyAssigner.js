@@ -7,7 +7,7 @@ class DutyAssigner {
 
   #holidayEmployees;
 
-  #monthlyScheduler;
+  #monthlyScheduler = [];
 
   #employees = [];
 
@@ -26,7 +26,7 @@ class DutyAssigner {
 
   assignDuty() {
     this.getMonthlyScheduler();
-    console.log(this.#employees);
+    return this.#monthlyScheduler;
   }
 
   getMonthlyScheduler() {
@@ -39,6 +39,15 @@ class DutyAssigner {
       } else {
         this.applyDuty(this.#holidayEmployees, this.#employeesIndex[1], false);
       }
+
+      const dayOfWeek =
+        DAY_OF_WEEK[this.getDay(start)] +
+        (this.isLegalHoliday(start) ? '(휴무)' : '');
+      this.#monthlyScheduler.push([
+        `${this.#dutyScheduler[0]} ${start}일 ${dayOfWeek} ${this.#employees.at(
+          -1,
+        )}`,
+      ]);
     }
   }
 
@@ -59,12 +68,17 @@ class DutyAssigner {
     return new Date(2023, month, 0).getDate();
   }
 
-  // 시작 요일부터 평일인지 판단하는 기능 (휴일: 토요일, 일요일, 법적공휴일 LEGAL_HOLIDAYS)
+  isLegalHoliday(date) {
+    const isLegalHoliday = LEGAL_HOLIDAYS.includes(
+      `${this.#dutyScheduler[0]}월 ${date}일`,
+    );
+    return isLegalHoliday;
+  }
+
   isWeekday(date) {
     const day = new Date(2023, +this.#dutyScheduler[0] - 1, date).getDay();
     const isWeekend = day === 0 || day === 6;
-    const isLegalHoliday = LEGAL_HOLIDAYS.includes(`5월 ${date}일`);
-    return !isWeekend && !isLegalHoliday;
+    return !isWeekend && !this.isLegalHoliday(date);
   }
 
   adjustOrder(employeesList, index) {
