@@ -68,7 +68,16 @@ class DutyAssigner {
   }
 
   applyDuty(employeesList, index, isWeekday) {
-    const employee = employeesList[index];
+    let employee = employeesList[index];
+
+    if (employee === this.#employees.at(-1)) {
+      this.swapEmployees(
+        employeesList,
+        index,
+        (index + 1) % employeesList.length,
+      );
+      employee = employeesList[index];
+    }
 
     this.#employees.push(employee);
     if (isWeekday) {
@@ -76,6 +85,13 @@ class DutyAssigner {
     } else {
       this.#employeesIndex[1] = (index + 1) % employeesList.length;
     }
+  }
+
+  swapEmployees(employeesList, index1, index2) {
+    [employeesList[index1], employeesList[index2]] = [
+      employeesList[index2],
+      employeesList[index1],
+    ];
   }
 }
 
