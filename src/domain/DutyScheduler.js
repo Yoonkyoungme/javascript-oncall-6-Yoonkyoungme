@@ -31,6 +31,10 @@ class DutyScheduler {
       throw new Error(ERROR_MESSAGES.INVALID_INPUT);
     }
   }
+
+  getDutySchedule() {
+    return this.#dutySchedule;
+  }
 }
 
 export default DutyScheduler;
