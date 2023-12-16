@@ -28,25 +28,37 @@ class DutyAssigner {
     this.getMonthlyScheduler();
   }
 
+  assignDutyToEmployee(date, isWeekday) {
+    const employeesList = isWeekday
+      ? this.#weekdayEmployees
+      : this.#holidayEmployees;
+    const index = isWeekday ? 0 : 1;
+
+    let employee = employeesList[this.#employeesIndex[index]];
+    if (employee === this.#employees.at(-1)) {
+      employee = this.adjustOrder(employeesList, this.#employeesIndex[index]);
+    }
+    this.#employees.push(employee);
+    this.#employeesIndex[index] =
+      (this.#employeesIndex[index] + 1) % employeesList.length;
+  }
+
+  getFormattedDate(date) {
+    const dayOfWeek =
+      DAY_OF_WEEK[this.getDay(date)] +
+      (this.isLegalHoliday(date) ? '(휴무)' : '');
+    return `${
+      this.#dutyScheduler[0]
+    }월 ${date}일 ${dayOfWeek} ${this.#employees.at(-1)}`;
+  }
+
   getMonthlyScheduler() {
     const startDay = this.getStartDay();
     const endDay = this.getEndDay();
-    for (let start = startDay; start <= endDay; start += 1) {
-      const isWeekday = this.isWeekday(start);
-      if (isWeekday) {
-        this.applyDuty(this.#weekdayEmployees, this.#employeesIndex[0], true);
-      } else {
-        this.applyDuty(this.#holidayEmployees, this.#employeesIndex[1], false);
-      }
-
-      const dayOfWeek =
-        DAY_OF_WEEK[this.getDay(start)] +
-        (this.isLegalHoliday(start) ? '(휴무)' : '');
-      this.#monthlyScheduler.push([
-        `${
-          this.#dutyScheduler[0]
-        }월 ${start}일 ${dayOfWeek} ${this.#employees.at(-1)}`,
-      ]);
+    for (let date = startDay; date <= endDay; date += 1) {
+      const isWeekday = this.isWeekday(date);
+      this.assignDutyToEmployee(date, isWeekday);
+      this.#monthlyScheduler.push([this.getFormattedDate(date)]);
     }
   }
 
