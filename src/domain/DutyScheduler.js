@@ -1,5 +1,5 @@
 import { ERROR_MESSAGES } from '../utils/constants/messages.js';
-import { WEEKDAYS } from '../utils/constants/dates.js';
+import { DAY_OF_WEEK } from '../utils/constants/dates.js';
 
 class DutyScheduler {
   #dutySchedule;
@@ -27,7 +27,7 @@ class DutyScheduler {
 
   validateDay() {
     const [month, day] = this.#dutySchedule;
-    if (!WEEKDAYS.includes(day)) {
+    if (!DAY_OF_WEEK.includes(day)) {
       throw new Error(ERROR_MESSAGES.INVALID_INPUT);
     }
   }

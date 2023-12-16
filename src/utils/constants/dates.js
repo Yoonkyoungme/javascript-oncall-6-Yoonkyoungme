@@ -1,4 +1,4 @@
-export const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
+export const DAY_OF_WEEK = ['일', '월', '화', '수', '목', '금', '토'];
 export const LEGAL_HOLIDAYS = [
   '1월 1일',
   '3월 1일',
