@@ -67,24 +67,23 @@ class DutyAssigner {
     return !isWeekend && !isLegalHoliday;
   }
 
+  adjustOrder(employeesList, index) {
+    this.swapEmployees(
+      employeesList,
+      index,
+      (index + 1) % employeesList.length,
+    );
+    return employeesList[index];
+  }
+
   applyDuty(employeesList, index, isWeekday) {
     let employee = employeesList[index];
-
     if (employee === this.#employees.at(-1)) {
-      this.swapEmployees(
-        employeesList,
-        index,
-        (index + 1) % employeesList.length,
-      );
-      employee = employeesList[index];
+      employee = this.adjustOrder(employeesList, index);
     }
-
     this.#employees.push(employee);
-    if (isWeekday) {
-      this.#employeesIndex[0] = (index + 1) % employeesList.length;
-    } else {
-      this.#employeesIndex[1] = (index + 1) % employeesList.length;
-    }
+    this.#employeesIndex[isWeekday ? 0 : 1] =
+      (index + 1) % employeesList.length;
   }
 
   swapEmployees(employeesList, index1, index2) {
